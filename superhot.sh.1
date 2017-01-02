@@ -1,0 +1,15 @@
+hadoop fs -rm /input/*
+java -jar superhot.jar
+hadoop fs -copyFromLocal description.txt /input
+hadoop fs -copyFromLocal article.txt /input
+hadoop fs -rmr /input
+hadoop fs -mkdir /input
+hadoop fs -copyFromLocal description.txt /input
+hadoop fs -rmr /output
+hadoop jar wordcount-1.0-SNAPSHOT.jar WordCount /input /output
+hadoop fs -rmr /topn/output
+hadoop jar TopN-1.0-SNAPSHOT.jar TopN  /output /topn/output 10
+hadoop fs -cat /topn/output/*
+hadoop fs -rmr /pig_out
+pig getArticles.pig
+hadoop fs -cat /pig_out/top_articles/part-r-00000
